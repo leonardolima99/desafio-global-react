@@ -17,7 +17,7 @@ export const Button = styled.button`
   border-radius: 8px;
   margin: 8px 8px 0;
   padding: ${(props: StyleProps) =>
-    props.size === "small" ? "8px 12px 8px 8px" : "12px 16px 12px 12px"}
+    props.size === "small" ? "8px 12px 8px 8px" : "12px 16px 12px 12px"};
   cursor: pointer;
   transition: filter 0.2s;
 
