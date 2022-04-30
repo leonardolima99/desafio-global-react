@@ -1,8 +1,6 @@
 import { Button } from "../../components/Button";
 import * as S from "./styles";
 
-import "./styles.css";
-
 export function Home() {
   return (
     <S.Page>

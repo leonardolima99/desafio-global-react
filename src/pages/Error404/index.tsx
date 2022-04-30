@@ -1,9 +1,20 @@
-import "./styles.css";
+import { Button } from "../../components/Button";
+import * as S from "./styles";
 
 export function Error404() {
   return (
-    <div className="error404">
-      <h1>Not Found - Não tem nada aqui...</h1>
-    </div>
+    <S.Page>
+      <S.Aside>
+        <S.Header>Global Tecnologia</S.Header>
+        <S.Wrap>
+          <S.Menu>
+            <S.Item>Principal</S.Item>
+            <S.Item>Gerenciamento de usuários</S.Item>
+          </S.Menu>
+          <S.Logout>Sair</S.Logout>
+        </S.Wrap>
+      </S.Aside>
+      <S.Main></S.Main>
+    </S.Page>
   );
 }

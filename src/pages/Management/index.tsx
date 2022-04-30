@@ -1,35 +1,20 @@
-import { useState } from "react";
-
-import "./styles.css";
+import { Button } from "../../components/Button";
+import * as S from "./styles";
 
 export function Management() {
-  const [email, setEmail] = useState<string>("");
-  const [senha, setSenha] = useState<string>("");
-
   return (
-    <div className="management">
-      <div className="wrap">
-        <span className="title">Área restrita</span>
-        <form className="form">
-          <input
-            type="text"
-            className="input"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="password"
-            className="input"
-            placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-          />
-          <button type="submit" className="button">
-            Acessar
-          </button>
-        </form>
-      </div>
-    </div>
+    <S.Page>
+      <S.Aside>
+        <S.Header>Global Tecnologia</S.Header>
+        <S.Wrap>
+          <S.Menu>
+            <S.Item>Principal</S.Item>
+            <S.Item>Gerenciamento de usuários</S.Item>
+          </S.Menu>
+          <S.Logout>Sair</S.Logout>
+        </S.Wrap>
+      </S.Aside>
+      <S.Main></S.Main>
+    </S.Page>
   );
 }
