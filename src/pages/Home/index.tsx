@@ -1,11 +1,8 @@
-import { useState } from "react";
+import { Button } from "../../components/Button";
 
 import "./styles.css";
 
 export function Home() {
-  const [email, setEmail] = useState<string>("");
-  const [senha, setSenha] = useState<string>("");
-
   return (
     <div className="home">
       <aside className="aside">
