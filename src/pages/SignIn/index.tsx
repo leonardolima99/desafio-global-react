@@ -1,35 +1,36 @@
 import { useState } from "react";
+import { Button } from "../../components/Button";
 
-import "./styles.css";
+import { Form, Input, Page, Title, Wrap } from "./styles";
 
 export function SignIn() {
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
 
   return (
-    <div className="signin">
-      <div className="wrap">
-        <span className="title">Área restrita</span>
-        <form className="form">
-          <input
+    <Page>
+      <Wrap>
+        <Title>Área restrita</Title>
+        <Form>
+          <Input
             type="text"
             className="input"
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <input
+          <Input
             type="password"
             className="input"
             placeholder="Senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
-          <button type="submit" className="button">
+          <Button icon="login" size="large">
             Acessar
-          </button>
-        </form>
-      </div>
-    </div>
+          </Button>
+        </Form>
+      </Wrap>
+    </Page>
   );
 }
