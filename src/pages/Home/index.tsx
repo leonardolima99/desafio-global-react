@@ -1,21 +1,22 @@
 import { Button } from "../../components/Button";
+import * as S from "./styles";
 
 import "./styles.css";
 
 export function Home() {
   return (
-    <div className="home">
-      <aside className="aside">
-        <header className="header">Global Tecnologia</header>
-        <div className="wrap">
-          <div className="menu">
-            <div className="item">Principal</div>
-            <div className="item">Gerenciamento de usuários</div>
-          </div>
-          <div className="item logout">Sair</div>
-        </div>
-      </aside>
-      <main></main>
-    </div>
+    <S.Page>
+      <S.Aside>
+        <S.Header>Global Tecnologia</S.Header>
+        <S.Wrap>
+          <S.Menu>
+            <S.Item>Principal</S.Item>
+            <S.Item>Gerenciamento de usuários</S.Item>
+          </S.Menu>
+          <S.Logout>Sair</S.Logout>
+        </S.Wrap>
+      </S.Aside>
+      <S.Main></S.Main>
+    </S.Page>
   );
 }
