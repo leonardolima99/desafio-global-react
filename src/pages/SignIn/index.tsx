@@ -1,25 +1,25 @@
 import { useState } from "react";
 import { Button } from "../../components/Button";
 
-import { Form, Input, Page, Title, Wrap } from "./styles";
+import * as S from "./styles";
 
 export function SignIn() {
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
 
   return (
-    <Page>
-      <Wrap>
-        <Title>Área restrita</Title>
-        <Form>
-          <Input
+    <S.Page>
+      <S.Wrap>
+        <S.Title>Área restrita</S.Title>
+        <S.Form>
+          <S.Input
             type="text"
             className="input"
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Input
+          <S.Input
             type="password"
             className="input"
             placeholder="Senha"
@@ -29,8 +29,8 @@ export function SignIn() {
           <Button icon="login" size="large">
             Acessar
           </Button>
-        </Form>
-      </Wrap>
-    </Page>
+        </S.Form>
+      </S.Wrap>
+    </S.Page>
   );
 }
