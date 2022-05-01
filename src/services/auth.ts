@@ -1,26 +1,23 @@
 import api from "./api";
-import jwt_decode, { JwtPayload } from "jwt-decode";
+import { AxiosResponse, AxiosError } from "axios";
 
-export async function signIn(email: string, senha: string) {
-  const params = new URLSearchParams();
-  params.append("email", email);
-  params.append("senha", senha);
-  const response = await api.post("login", params);
-  localStorage.setItem("token", response.data.token);
-}
+type ResponseData = {
+  token: string;
+};
 
-export async function isSigned() {
-  const token = localStorage.getItem("token");
+export async function signIn(
+  email: string,
+  senha: string
+): Promise<AxiosResponse<ResponseData, any>> {
+  try {
+    const params = new URLSearchParams();
+    params.append("email", email);
+    params.append("senha", senha);
+    const response = await api.post("login", params);
 
-  if (!token) return false;
-
-  const decodedToken = jwt_decode<JwtPayload>(token);
-
-  if ((decodedToken.exp as number) * 1000 < Date.now()) {
-    console.log("token expired");
-    return false;
-  } else {
-    console.log("valid");
-    return true;
+    return response;
+  } catch (error) {
+    const err = error as Error | AxiosError;
+    throw new Error(err.message);
   }
 }

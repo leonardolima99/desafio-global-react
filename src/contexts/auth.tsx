@@ -1,14 +1,17 @@
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 
 import api from "../services/api";
+import * as auth from "../services/auth";
 import { AxiosError } from "axios";
 
 type AuthContextData = {
   token?: string;
   signed: boolean;
-  signIn(email: string, senha: string): any;
-  signOut(): void;
+  loading: boolean;
+  user: User | undefined;
+  signIn(email: string, senha: string, callback: VoidFunction): void;
+  signOut(callback: VoidFunction): void;
 };
 
 type AuthProviderProps = {
@@ -20,65 +23,111 @@ interface DecodedToken extends JwtPayload {
   nivel_acesso: string;
 }
 
+type User = {
+  token: string;
+  email: string;
+  nivel_acesso: string;
+};
+
 export const AuthContext = createContext<AuthContextData>(
   {} as AuthContextData
 );
 
+export function useAuth() {
+  const context = useContext(AuthContext);
+
+  return context;
+}
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [signed, setSigned] = useState<boolean>(false);
+  const [user, setUser] = useState<User>();
+  const [loading, setLoading] = useState<boolean>(true);
 
-  async function signIn(email: string, senha: string) {
-    try {
-      if (!email) throw new Error("O campo e-mail é obrigatório.");
-      if (!senha) throw new Error("O campo senha é obrigatória.");
+  function decode(token: string | undefined): User | undefined {
+    if (token) {
+      const decoded = jwtDecode<DecodedToken>(token);
 
-      const params = new URLSearchParams();
-      params.append("email", email);
-      params.append("senha", senha);
-
-      api
-        .post("login", params)
-        .then((response) => {
-          console.log("respsostas", response.data.token);
-          const decoded = jwtDecode<DecodedToken>(response.data.token);
-
-          if ((decoded.exp as number) * 1000 < Date.now()) {
-            setSigned(false);
-            console.log("token expired");
-          } else {
-            api.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${response.data.token}`;
-
-            localStorage.setItem("User:token", response.data.token);
-            localStorage.setItem("User:email", decoded.email);
-            localStorage.setItem("User:nivel_acesso", decoded.nivel_acesso);
-
-            setSigned(true);
-          }
-        })
-        .catch((err) => {
-          setSigned(false);
-          console.log(err.response.data.message);
-        });
-    } catch (err) {
-      const error = err as Error | AxiosError;
-      /* console.log(error.message); */
+      if ((decoded.exp as number) * 1000 < Date.now()) {
+        return undefined;
+      } else {
+        return {
+          token,
+          email: decoded.email,
+          nivel_acesso: decoded.nivel_acesso,
+        };
+      }
+    } else {
+      return undefined;
     }
   }
 
-  function signOut() {
-    setSigned(false);
+  async function signIn(email: string, senha: string, callback: VoidFunction) {
+    try {
+      if (!email) throw new Error("O campo e-mail é obrigatório.");
+      if (!senha) throw new Error("O campo senha é obrigatório.");
+
+      const response = await auth.signIn(email, senha);
+      console.log(response);
+      const user_temp = decode(response.data.token);
+
+      if (user_temp) {
+        localStorage.setItem("User", JSON.stringify(user_temp));
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${user_temp.token}`;
+        setUser(user_temp);
+      }
+
+      callback();
+    } catch (error) {
+      const err = error as Error | AxiosError;
+      throw new Error(err.message);
+    }
+  }
+
+  function signOut(callback: VoidFunction) {
+    setUser(undefined);
 
     api.defaults.headers.common["Authorization"] = "";
 
-    localStorage.remove("User:token");
-    localStorage.remove("User:email");
-    localStorage.remove("User:nivel_acesso");
+    localStorage.removeItem("User");
+
+    callback();
+  }
+
+  const loadStorageData = (): null => {
+    const temp = localStorage.getItem("User");
+    const storageUser = temp && JSON.parse(temp);
+
+    console.log("storageUser", storageUser);
+    if (storageUser) {
+      if (user == storageUser) return null;
+
+      const user_temp = decode(storageUser.token);
+      console.log(user_temp);
+      if (user_temp) {
+        localStorage.setItem("User", JSON.stringify(user_temp));
+        api.defaults.headers.common["Authorization"] = `Bearer ${user?.token}`;
+        setUser(user_temp);
+      }
+    }
+    setLoading(false);
+
+    return null;
+  };
+
+  useEffect(() => {
+    loadStorageData();
+  }, []);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
   }
 
   return (
-    <AuthContext.Provider value={{ signed, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ signed: !!user, user, loading, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

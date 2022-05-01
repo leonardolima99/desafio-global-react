@@ -1,17 +1,21 @@
-import { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { AuthContext } from "../../contexts/auth";
+import { useAuth } from "../../contexts/auth";
 
 type Props = {
   children: JSX.Element;
+  nivel_acesso?: "funcionario" | "administrador";
 };
 
-export function RequireAuth({ children }: Props) {
-  const { signed } = useContext(AuthContext);
+export function RequireAuth({ nivel_acesso, children }: Props) {
+  const { signed, user } = useAuth();
 
-  if (!signed) {
-    return <Navigate to="/signin" />;
+  if (signed) {
+    if (user?.nivel_acesso === "administrador") {
+      return children;
+    } else if (user?.nivel_acesso === nivel_acesso) {
+      return children;
+    }
   }
 
-  return children;
+  return <Navigate to="/signin" />;
 }

@@ -14,17 +14,19 @@ export function SignIn() {
 
   const navigate = useNavigate();
 
-  const handleSignIn = async (e: FormEvent) => {
+  const handleSignIn = (e: FormEvent) => {
     e.preventDefault();
 
     if (email && senha) {
-      await signIn(email, senha);
+      signIn(email, senha, () => {
+        navigate("/", { replace: true });
+      });
     }
   };
 
-  useEffect(() => {
-    signed && navigate("/");
-  }, [signed]);
+  /* useEffect(() => {
+    signed && navigate("/", { replace: true });
+  }, [signed]); */
 
   return (
     <S.Page>
