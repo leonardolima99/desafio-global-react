@@ -1,13 +1,15 @@
+import { useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { AuthContext } from "../../contexts/auth";
 
 type Props = {
   children: JSX.Element;
 };
 
 export function RequireAuth({ children }: Props) {
-  const isAuth = false;
+  const { signed } = useContext(AuthContext);
 
-  if (!isAuth) {
+  if (!signed) {
     return <Navigate to="/signin" />;
   }
 

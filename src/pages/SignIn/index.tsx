@@ -1,34 +1,38 @@
-import { FormEvent, useState } from "react";
+import { useEffect } from "react";
+import { FormEvent, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
-import api from "../../services/api";
+import { AuthContext } from "../../contexts/auth";
 
 import * as S from "./styles";
 
 export function SignIn() {
-  const [email, setEmail] = useState<string>("");
-  const [senha, setSenha] = useState<string>("");
+  const [email, setEmail] = useState<string>("usuarioadm@teste.com.br");
+  const [senha, setSenha] = useState<string>("123456");
+
+  const { signIn, signed } = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const handleSignIn = async (e: FormEvent) => {
-    try {
-      e.preventDefault();
-      const params = new URLSearchParams();
-      params.append("email", email);
-      params.append("senha", senha);
-      const response = await api.post("login", params);
-      localStorage.setItem("token", response.data.token);
-      console.log(localStorage.getItem("token"));
-    } catch (error) {
-      console.error(error);
+    e.preventDefault();
+
+    if (email && senha) {
+      await signIn(email, senha);
     }
   };
+
+  useEffect(() => {
+    signed && navigate("/");
+  }, [signed]);
 
   return (
     <S.Page>
       <S.Wrap>
-        <S.Title>Área restrita</S.Title>
+        <S.Title>Área restrita {signed + ""}</S.Title>
         <S.Form onSubmit={(e) => handleSignIn(e)}>
           <S.Input
-            type="text"
+            type="email"
             className="input"
             placeholder="E-mail"
             value={email}
