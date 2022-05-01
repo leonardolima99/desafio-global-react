@@ -47,7 +47,7 @@ export function SignIn() {
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
           />
-          <Button icon="login" size="large">
+          <Button icon="login" size="large" color="primary">
             Acessar
           </Button>
         </S.Form>

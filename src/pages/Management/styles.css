@@ -1,0 +1,42 @@
+.Table {
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.HeadTable {
+  border-bottom: 1px solid rgba(#202020, 0.6);
+  color: rgba(#202020, 0.6);
+  display: flex;
+}
+
+.list {
+  list-style: none;
+}
+
+.item {
+  margin: 8px 16px;
+  padding: 6px;
+  background-color: #d8d8d8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text {
+  color: #202020;
+  max-width: 200px;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.text-muted {
+  color: #777777;
+  max-width: 200px;
+  width: 100%;
+  padding: 0 16px;
+}
+
+.actions {
+  display: flex;
+}

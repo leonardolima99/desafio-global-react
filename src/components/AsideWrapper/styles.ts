@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const Page = styled.div`
   display: flex;
   height: 100%;
+  width: 100%;
 `;
 
 export const Aside = styled.aside`
@@ -33,12 +34,16 @@ export const Item = styled.div`
   padding: 14px;
   font-size: 18px;
   border: 1px solid #202020;
+  cursor: pointer;
 `;
 
 export const Logout = styled(Item)`
   margin-bottom: 8px;
+  cursor: pointer;
 `;
 
 export const Main = styled.main`
   margin-bottom: 8px;
+  width: 100%;
+  padding: 0 16px;
 `;

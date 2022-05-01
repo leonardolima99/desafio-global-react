@@ -1,5 +1,4 @@
-import { useReducer } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../contexts/auth";
 
 import * as S from "./styles";
@@ -23,9 +22,16 @@ export function AsideWrapper({ children }: AsideWrapperProps) {
         <S.Header>Global Tecnologia</S.Header>
         <S.Wrap>
           <S.Menu>
-            <S.Item>Principal</S.Item>
+            <Link to="/" style={{ textDecoration: "none", color: "#202020" }}>
+              <S.Item>Principal</S.Item>
+            </Link>
             {user?.nivel_acesso === "administrador" ? (
-              <S.Item>Gerenciamento de usuários</S.Item>
+              <Link
+                to="/management"
+                style={{ textDecoration: "none", color: "#202020" }}
+              >
+                <S.Item>Usuários</S.Item>
+              </Link>
             ) : null}
           </S.Menu>
           <S.Logout onClick={handleSignOut}>Sair</S.Logout>
