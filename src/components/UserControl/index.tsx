@@ -20,6 +20,7 @@ export type UserControlProps = {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  users: DataProps[];
 };
 
 export function UserControl({
@@ -32,6 +33,7 @@ export function UserControl({
   setVisible,
   loading,
   setLoading,
+  users,
 }: UserControlProps) {
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
@@ -48,6 +50,11 @@ export function UserControl({
         nivel_acesso: nivelAcesso,
       });
     } else if (action === "new") {
+      if (users.find((user: DataProps) => user.email === email)) {
+        setLoading(false);
+        return false;
+      }
+
       const response = await api.post("users", {
         email,
         senha,
@@ -94,6 +101,7 @@ export function UserControl({
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <S.Input
           type="password"
@@ -101,6 +109,7 @@ export function UserControl({
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
+          required
         />
         <S.Wrap>
           <S.Input
@@ -110,6 +119,7 @@ export function UserControl({
             id="funcionario"
             checked={nivelAcesso === "funcionario"}
             onChange={(e) => setNivelAcesso("funcionario")}
+            required
           />
           <S.Label htmlFor="funcionario">Funcionário</S.Label>
 
@@ -120,6 +130,7 @@ export function UserControl({
             id="administrador"
             checked={nivelAcesso === "administrador"}
             onChange={() => setNivelAcesso("administrador")}
+            required
           />
           <S.Label htmlFor="administrador">Administrador</S.Label>
         </S.Wrap>

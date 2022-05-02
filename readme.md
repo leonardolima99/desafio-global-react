@@ -38,3 +38,5 @@ Usuários mocados:
     email: usuariocomum@teste.com.br
     senha: 123456
 ```
+
+### Design no [figma](https://www.figma.com/file/7ntk3a7PKyj9r7qSEHWPRe/Desafio-Global?node-id=1%3A2)

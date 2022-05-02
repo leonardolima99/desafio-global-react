@@ -74,6 +74,7 @@ export function Management() {
           setVisible={setVisible}
           loading={loading}
           setLoading={setLoading}
+          users={users}
         />
       ) : null}
       {loading ? <Loading /> : null}
