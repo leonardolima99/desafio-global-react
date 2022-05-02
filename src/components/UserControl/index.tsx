@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { setDatasets } from "react-chartjs-2/dist/utils";
-import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { Button } from "../Button";
 
@@ -110,7 +108,7 @@ export function UserControl({
             className="input"
             name="nivelAcesso"
             id="funcionario"
-            defaultChecked={nivelAcesso === "funcionario"}
+            checked={nivelAcesso === "funcionario"}
             onChange={(e) => setNivelAcesso("funcionario")}
           />
           <S.Label htmlFor="funcionario">Funcionário</S.Label>

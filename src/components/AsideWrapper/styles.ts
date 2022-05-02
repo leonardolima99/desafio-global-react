@@ -13,6 +13,7 @@ export const Page = styled.div`
 export const Aside = styled.aside`
   height: 100%;
   width: 220px;
+  margin-left: ${(props: Props) => (!props.visible ? "-220px" : "0px")};
   background-color: #c4c4c4;
   display: flex;
   flex-direction: column;
@@ -23,10 +24,14 @@ export const Aside = styled.aside`
   @media (max-width: 1000px) {
     margin-left: ${(props: Props) => (!props.visible ? "-220px" : "0px")};
   }
+
+  @media (min-width: 1001px) {
+    margin-left: ${(props: Props) => (props.visible ? "-220px" : "0px")};
+  }
 `;
 
 export const Span = styled.span`
-  position: absolute:
+  position: absolute;
 `;
 
 export const Header = styled.header`
@@ -69,5 +74,9 @@ export const Main = styled.main`
 
   @media (max-width: 1000px) {
     margin-left: ${(props: Props) => (props.visible ? "220px" : "0px")};
+  }
+
+  @media (min-width: 1001px) {
+    margin-left: ${(props: Props) => (!props.visible ? "220px" : "0px")};
   }
 `;

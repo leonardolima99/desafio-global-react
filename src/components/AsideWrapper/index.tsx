@@ -23,7 +23,6 @@ export function AsideWrapper({ children }: AsideWrapperProps) {
     <S.Page>
       <S.Aside visible={visible}>
         <S.Header>Global Tecnologia</S.Header>
-        <S.Span></S.Span>
         <S.Wrap>
           <S.Menu>
             <Link to="/" style={{ textDecoration: "none", color: "#202020" }}>
@@ -50,7 +49,7 @@ export function AsideWrapper({ children }: AsideWrapperProps) {
             color="primary"
             onClick={() => setVisible(!visible)}
           >
-            {visible ? "Fechar Menu" : "Abrir Menu"}
+            Toggle Menu
           </Button>
         </S.WrapButton>
 
