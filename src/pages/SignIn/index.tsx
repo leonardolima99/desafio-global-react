@@ -3,6 +3,7 @@ import { FormEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { Loading } from "../../components/Loading";
+import { MessageError } from "../../components/MessageError";
 import { AuthContext } from "../../contexts/auth";
 
 import * as S from "./styles";
@@ -12,19 +13,19 @@ export function SignIn() {
   const [senha, setSenha] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { signIn, signed } = useContext(AuthContext);
+  const { signIn, message, updateMessage } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  const handleSignIn = (e: FormEvent) => {
+  const handleSignIn = async (e: FormEvent) => {
     e.preventDefault();
 
     if (email && senha) {
       setLoading(true);
-      signIn(email, senha, () => {
-        navigate("/", { replace: true });
-
+      await signIn(email, senha, () => {
         setLoading(false);
+        navigate("/", { replace: true });
+        updateMessage("");
       });
     }
   };
@@ -35,6 +36,8 @@ export function SignIn() {
 
   return (
     <S.Page>
+      {message && <MessageError message={message} />}
+
       <S.Wrap>
         <S.Title>Área restrita</S.Title>
         <S.Form onSubmit={(e) => handleSignIn(e)}>
@@ -54,12 +57,12 @@ export function SignIn() {
             onChange={(e) => setSenha(e.target.value)}
             required
           />
-          <Button icon="login" size="large" color="primary">
+          <Button type="submit" icon="login" size="large" color="primary">
             Acessar
           </Button>
         </S.Form>
-        {loading ? <Loading /> : null}
       </S.Wrap>
+      {loading ? <Loading /> : null}
     </S.Page>
   );
 }

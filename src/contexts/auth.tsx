@@ -3,14 +3,17 @@ import jwtDecode, { JwtPayload } from "jwt-decode";
 
 import api from "../services/api";
 import * as auth from "../services/auth";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { Loading } from "../components/Loading";
 
 type AuthContextData = {
   token?: string;
   signed: boolean;
   loading: boolean;
   user: User | undefined;
-  signIn(email: string, senha: string, callback: VoidFunction): void;
+  message: string;
+  updateMessage: (new_message: string) => void;
+  signIn(email: string, senha: string, callback: VoidFunction): Error | any;
   signOut(callback: VoidFunction): void;
 };
 
@@ -29,6 +32,11 @@ type User = {
   nivel_acesso: string;
 };
 
+type ResponseData = {
+  token?: string;
+  message?: string;
+};
+
 export const AuthContext = createContext<AuthContextData>(
   {} as AuthContextData
 );
@@ -42,6 +50,7 @@ export function useAuth() {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [message, setMessage] = useState<string>("");
 
   function decode(token: string | undefined): User | undefined {
     if (token) {
@@ -61,27 +70,43 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
+  function updateMessage(new_message: string) {
+    setMessage(new_message);
+  }
+
   async function signIn(email: string, senha: string, callback: VoidFunction) {
     try {
       if (!email) throw new Error("O campo e-mail é obrigatório.");
       if (!senha) throw new Error("O campo senha é obrigatório.");
 
-      const response = await auth.signIn(email, senha);
+      auth
+        .signIn(email, senha)
+        .then((response: AxiosResponse<ResponseData>) => {
+          if (response.status === 401) {
+            updateMessage(JSON.stringify(response.data));
+          }
 
-      const user_temp = decode(response.data.token);
-
-      if (user_temp) {
-        localStorage.setItem("User", JSON.stringify(user_temp));
-        api.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${user_temp.token}`;
-        setUser(user_temp);
-      }
+          const user_temp = decode(response.data.token);
+          if (user_temp) {
+            localStorage.setItem("User", JSON.stringify(user_temp));
+            api.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${user_temp.token}`;
+            setUser(user_temp);
+          }
+        })
+        .catch((error: AxiosError<AxiosResponse<ResponseData>>) => {
+          const err = new AxiosError(error.message);
+          const { response } = err.message as any;
+          if (response) {
+            updateMessage(err.message.response.data.message);
+          }
+        });
 
       callback();
     } catch (error) {
       const err = error as Error | AxiosError;
-      throw new Error(err.message);
+      return err;
     }
   }
 
@@ -121,12 +146,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <Loading />;
   }
 
   return (
     <AuthContext.Provider
-      value={{ signed: !!user, user, loading, signIn, signOut }}
+      value={{
+        signed: !!user,
+        user,
+        loading,
+        message,
+        updateMessage,
+        signIn,
+        signOut,
+      }}
     >
       {children}
     </AuthContext.Provider>

@@ -18,6 +18,6 @@ export async function signIn(
     return response;
   } catch (error) {
     const err = error as Error | AxiosError;
-    throw new Error(err.message);
+    throw new AxiosError(err);
   }
 }

@@ -7,9 +7,9 @@
 }
 
 .spinner {
-  width: 150px;
-  height: 150px;
-  border: 10px solid transparent;
+  width: 60px;
+  height: 60px;
+  border: 6px solid transparent;
   border-left-color: #008bef;
   border-radius: 100%;
 

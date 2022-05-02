@@ -88,6 +88,7 @@ export function UserControl({
         <S.TitleWrap>
           <S.Title>Novo usuário</S.Title>
           <Button
+            type="reset"
             icon="none"
             color="danger"
             size="small"
@@ -138,7 +139,7 @@ export function UserControl({
           />
           <S.Label htmlFor="administrador">Administrador</S.Label>
         </S.Wrap>
-        <Button icon="none" color="primary" size="large">
+        <Button type="submit" icon="none" color="primary" size="large">
           {action === "new" ? "Adicionar usuário" : "Atualizar usuário"}
         </Button>
       </S.Form>

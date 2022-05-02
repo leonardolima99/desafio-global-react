@@ -10,6 +10,7 @@ export interface ButtonProps {
   noText?: boolean;
   children: ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  type?: "button" | "submit" | "reset";
 }
 
 export function Button({
@@ -19,6 +20,7 @@ export function Button({
   noText = false,
   children,
   onClick,
+  type = "submit",
   ...rest
 }: ButtonProps) {
   return (
@@ -30,6 +32,7 @@ export function Button({
           : { backgroundColor: "#008BEF" }
       }
       onClick={onClick}
+      type={type}
       {...rest}
     >
       {icon !== "none" ? <Icon name={icon} size={24} color="#f5f5f5" /> : null}
