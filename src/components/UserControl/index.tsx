@@ -43,6 +43,10 @@ export function UserControl({
 
   const handleSubmit = async (id?: number) => {
     setLoading(true);
+    if (!email || !senha || !nivelAcesso) {
+      setLoading(false);
+      return false;
+    }
     if (action === "edit") {
       await api.put(`users/${id}`, {
         email,
