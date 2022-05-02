@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../contexts/auth";
+import { Button } from "../Button";
 
 import * as S from "./styles";
 
@@ -9,6 +11,7 @@ export type AsideWrapperProps = {
 
 export function AsideWrapper({ children }: AsideWrapperProps) {
   const { signOut, user } = useAuth();
+  const [visible, setVisible] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleSignOut = () => {
     signOut(() => {
@@ -18,8 +21,9 @@ export function AsideWrapper({ children }: AsideWrapperProps) {
 
   return (
     <S.Page>
-      <S.Aside>
+      <S.Aside visible={visible}>
         <S.Header>Global Tecnologia</S.Header>
+        <S.Span></S.Span>
         <S.Wrap>
           <S.Menu>
             <Link to="/" style={{ textDecoration: "none", color: "#202020" }}>
@@ -37,7 +41,21 @@ export function AsideWrapper({ children }: AsideWrapperProps) {
           <S.Logout onClick={handleSignOut}>Sair</S.Logout>
         </S.Wrap>
       </S.Aside>
-      <S.Main>{children}</S.Main>
+
+      <S.Main visible={visible}>
+        <S.WrapButton>
+          <Button
+            size="small"
+            icon="none"
+            color="primary"
+            onClick={() => setVisible(!visible)}
+          >
+            {visible ? "Fechar Menu" : "Abrir Menu"}
+          </Button>
+        </S.WrapButton>
+
+        {children}
+      </S.Main>
     </S.Page>
   );
 }

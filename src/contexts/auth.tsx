@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (!senha) throw new Error("O campo senha é obrigatório.");
 
       const response = await auth.signIn(email, senha);
-      console.log(response);
+
       const user_temp = decode(response.data.token);
 
       if (user_temp) {
@@ -99,15 +99,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const temp = localStorage.getItem("User");
     const storageUser = temp && JSON.parse(temp);
 
-    console.log("storageUser", storageUser);
     if (storageUser) {
       if (user == storageUser) return null;
 
       const user_temp = decode(storageUser.token);
-      console.log(user_temp);
       if (user_temp) {
         localStorage.setItem("User", JSON.stringify(user_temp));
-        api.defaults.headers.common["Authorization"] = `Bearer ${user?.token}`;
+        api.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer ${user_temp.token}`;
         setUser(user_temp);
       }
     }

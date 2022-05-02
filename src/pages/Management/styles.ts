@@ -6,14 +6,16 @@ export const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-content: center;
-  font-size: 18px;
-  font-weight: 600;
+
   padding: 6px 20px;
 `;
 
 export const Title = styled.span`
   align-items: center;
   align-self: center;
+
+  font-size: 18px;
+  font-weight: 600;
 `;
 
 export const Table = styled.div`
@@ -33,33 +35,103 @@ export const HeadTable = styled.div`
   display: flex;
   margin: 0 16px;
   justify-content: space-between;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
 
-export const HeadItem = styled.div`
+export const HeadEmail = styled.div`
   padding: 8px 20px;
   background-color: transparent;
-  max-width: 200px;
+  max-width: 150px;
   width: 100%;
 `;
 
+export const HeadRole = styled.div`
+  padding: 8px 20px;
+  background-color: transparent;
+  max-width: 100px;
+  width: 100%;
+`;
+
+export const HeadAction = styled.div`
+  padding: 8px 20px;
+  background-color: transparent;
+  max-width: 100px;
+  width: 100%;
+  text-align: right;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+    text-align: left;
+  }
+`;
+/* 
 export const WrapLine = styled.span`
   display: flex;
   width: 100%;
+
+`; */
+
+export const List = styled.ul`
+  list-style: none;
+`;
+export const ItemMessage = styled.div`
+  margin: 8px 16px;
+  padding: 6px;
+  background-color: rgba(#008bef, 0.9);
+  border: 4px solid #008bef;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
-export const List = styled.div``;
-
+export const TextMessage = styled.div`
+  color: #202020;
+  width: 100%;
+  padding: 0 16px;
+`;
 export const Item = styled.div`
-  padding: 32px;
+  margin: 8px 16px;
+  padding: 6px;
   background-color: #d8d8d8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 export const Text = styled.div`
   color: #202020;
+  max-width: 150px;
+  width: 100%;
+  padding: 0 16px;
+
+  @media (max-width: 900px) {
+    margin: 16px;
+  }
 `;
 
 export const TextMuted = styled.div`
-  color: #888888;
+  color: #777777;
+  max-width: 100px;
+  width: 100%;
+  padding: 0 16px;
+
+  @media (max-width: 900px) {
+    margin: 0 16px 16px;
+  }
 `;
 
 export const Wrap = styled.div`
@@ -71,8 +143,13 @@ export const Wrap = styled.div`
 
 export const Menu = styled.div``;
 
-export const Logout = styled(Item)`
-  margin-bottom: 8px;
+export const Actions = styled.div`
+  display: flex;
+
+  @media (max-width: 900px) {
+    align-items: flex-start;
+    margin: 0 24px 16px;
+  }
 `;
 
 export const Main = styled.main`

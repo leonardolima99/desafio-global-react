@@ -1,3 +1,40 @@
+import { Data, LineDataPropsArray } from "../pages/Home";
+import api from "./api";
+
+function loadData() {
+  let data = {} as Data;
+  api.get("helth-check").then((response) => {
+    data = response.data;
+
+    const data_temp = [
+      {
+        labels: data.cpu.labels as string[],
+        datasets: [
+          {
+            label: `CPU Usage Data`,
+            data: data.cpu.data as number[],
+            borderColor: "rgb(48, 137, 254)",
+            backgroundColor: "rgba(48, 137, 254, .5)",
+          },
+        ],
+      },
+      {
+        labels: data.memory.labels as string[],
+        datasets: [
+          {
+            label: `Memory Usage Data`,
+            data: data.memory.data as number[],
+            borderColor: "rgb(255, 99, 132)",
+            backgroundColor: "rgba(255, 99, 132, 0.5)",
+          },
+        ],
+      },
+    ] as LineDataPropsArray;
+
+    return data_temp;
+  });
+}
+
 const healthCheck = {
   cpu: {
     labels: [
@@ -41,4 +78,4 @@ const healthCheck = {
   },
 };
 
-export { healthCheck };
+export { healthCheck, loadData };

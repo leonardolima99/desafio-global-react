@@ -9,7 +9,6 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import faker from "@faker-js/faker";
 
 ChartJS.register(
   CategoryScale,
@@ -29,10 +28,10 @@ export type LineDataSetsProps = {
   backgroundColor: string;
 }[];
 
-export type LineDataProps = {
+export interface LineDataProps {
   labels: [string];
   datasets: LineDataSetsProps;
-};
+}
 export type LineProps = {
   options: object;
   data: LineDataProps;

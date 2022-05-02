@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { FormEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
+import { Loading } from "../../components/Loading";
 import { AuthContext } from "../../contexts/auth";
 
 import * as S from "./styles";
@@ -9,16 +10,19 @@ import * as S from "./styles";
 export function SignIn() {
   const [email, setEmail] = useState<string>("usuarioadm@teste.com.br");
   const [senha, setSenha] = useState<string>("123456");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { signIn, signed } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   const handleSignIn = (e: FormEvent) => {
+    setLoading(true);
     e.preventDefault();
 
     if (email && senha) {
       signIn(email, senha, () => {
+        setLoading(false);
         navigate("/", { replace: true });
       });
     }
@@ -31,7 +35,7 @@ export function SignIn() {
   return (
     <S.Page>
       <S.Wrap>
-        <S.Title>Área restrita {signed + ""}</S.Title>
+        <S.Title>Área restrita</S.Title>
         <S.Form onSubmit={(e) => handleSignIn(e)}>
           <S.Input
             type="email"
@@ -51,6 +55,7 @@ export function SignIn() {
             Acessar
           </Button>
         </S.Form>
+        {loading ? <Loading /> : null}
       </S.Wrap>
     </S.Page>
   );
