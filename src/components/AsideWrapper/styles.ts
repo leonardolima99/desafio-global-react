@@ -30,8 +30,8 @@ export const Aside = styled.aside`
   }
 `;
 
-export const Span = styled.span`
-  position: absolute;
+export const SpanHighlight = styled.span`
+  color: #008bef;
 `;
 
 export const Header = styled.header`

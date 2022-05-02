@@ -22,7 +22,9 @@ export function AsideWrapper({ children }: AsideWrapperProps) {
   return (
     <S.Page>
       <S.Aside visible={visible}>
-        <S.Header>Global Tecnologia</S.Header>
+        <S.Header>
+          <S.SpanHighlight>Global</S.SpanHighlight> Tecnologia
+        </S.Header>
         <S.Wrap>
           <S.Menu>
             <Link to="/" style={{ textDecoration: "none", color: "#202020" }}>
