@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "../../components/Button";
 import { Loading } from "../../components/Loading";
+import { MessageError } from "../../components/MessageError";
 import { DataProps, UserControl } from "../../components/UserControl";
+import { useAuth } from "../../contexts/auth";
 import api from "../../services/api";
 import * as S from "./styles";
 
@@ -12,7 +14,9 @@ export function Management() {
   const [users, setUsers] = useState<DataProps[]>([] as DataProps[]);
   const [reload, setReload] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
+  const [messageInfo, setMessageInfo] = useState<string>("");
+
+  const { message } = useAuth();
 
   function handleNewUser() {
     action !== "new" ? setAction("new") : null;
@@ -33,10 +37,10 @@ export function Management() {
     setReload(!reload);
     setLoading(false);
 
-    setMessage(response.data.message);
+    setMessageInfo(response.data.message);
 
     setTimeout(() => {
-      setMessage("");
+      setMessageInfo("");
     }, 5000);
   }
 
@@ -87,9 +91,10 @@ export function Management() {
           <S.HeadAction>Ações</S.HeadAction>
         </S.HeadTable>
         <S.List>
-          {message ? (
+          {message && <MessageError message={message} />}
+          {messageInfo ? (
             <S.ItemMessage>
-              <S.TextMessage>{message}</S.TextMessage>
+              <S.TextMessage>{messageInfo}</S.TextMessage>
             </S.ItemMessage>
           ) : null}
           {users.map((usr) => (

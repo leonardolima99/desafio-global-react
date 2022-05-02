@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../../contexts/auth";
 import api from "../../services/api";
 import { Button } from "../Button";
 
@@ -41,6 +42,8 @@ export function UserControl({
     "funcionario" | "administrador"
   >("funcionario");
 
+  const { updateMessage } = useAuth();
+
   const handleSubmit = async (id?: number) => {
     setLoading(true);
     if (!email || !senha || !nivelAcesso) {
@@ -59,11 +62,16 @@ export function UserControl({
         return false;
       }
 
-      const response = await api.post("users", {
-        email,
-        senha,
-        nivel_acesso: nivelAcesso,
-      });
+      api
+        .post("users", {
+          email,
+          senha,
+          nivel_acesso: nivelAcesso,
+        })
+        .then((response) => {})
+        .catch((error) => {
+          updateMessage(error.response.data.errors[0].msg);
+        });
       setData({} as DataProps);
     }
     setVisible(false);
