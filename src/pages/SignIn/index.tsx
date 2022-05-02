@@ -8,8 +8,8 @@ import { AuthContext } from "../../contexts/auth";
 import * as S from "./styles";
 
 export function SignIn() {
-  const [email, setEmail] = useState<string>("usuarioadm@teste.com.br");
-  const [senha, setSenha] = useState<string>("123456");
+  const [email, setEmail] = useState<string>("");
+  const [senha, setSenha] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
   const { signIn, signed } = useContext(AuthContext);
@@ -17,13 +17,14 @@ export function SignIn() {
   const navigate = useNavigate();
 
   const handleSignIn = (e: FormEvent) => {
-    setLoading(true);
     e.preventDefault();
 
     if (email && senha) {
+      setLoading(true);
       signIn(email, senha, () => {
-        setLoading(false);
         navigate("/", { replace: true });
+
+        setLoading(false);
       });
     }
   };
@@ -43,6 +44,7 @@ export function SignIn() {
             placeholder="E-mail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
           <S.Input
             type="password"
@@ -50,6 +52,7 @@ export function SignIn() {
             placeholder="Senha"
             value={senha}
             onChange={(e) => setSenha(e.target.value)}
+            required
           />
           <Button icon="login" size="large" color="primary">
             Acessar
