@@ -3,7 +3,7 @@
 Sistema de gerenciamento de usuários, exibição de gráficos com dados vindos de uma api externa,
 autenticação, rotas privadas com base no usuário.
 
-**Aqui tem o projeto rodando ao vivo: [link]()**
+**Aqui tem o projeto rodando ao vivo: [link](https://desafio-global.netlify.app/)**
 
 ![screenshot.jpg](screenshot.jpg)
 
