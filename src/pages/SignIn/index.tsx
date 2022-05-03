@@ -3,7 +3,7 @@ import { FormEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { Loading } from "../../components/Loading";
-import { MessageError } from "../../components/MessageError";
+import { Message } from "../../components/Message";
 import { AuthContext } from "../../contexts/auth";
 
 import * as S from "./styles";
@@ -22,22 +22,19 @@ export function SignIn() {
 
     if (email && senha) {
       setLoading(true);
-      await signIn(email, senha, () => {
-        setLoading(false);
+      signIn(email, senha, () => {
         navigate("/", { replace: true });
-        updateMessage("");
       });
+      setLoading(false);
     }
   };
 
-  /* useEffect(() => {
-    signed && navigate("/", { replace: true });
-  }, [signed]); */
+  useEffect(() => {
+    updateMessage({ new_message: [""], type: undefined });
+  }, []);
 
   return (
     <S.Page>
-      {message && <MessageError message={message} />}
-
       <S.Wrap>
         <S.Title>Área restrita</S.Title>
         <S.Form onSubmit={(e) => handleSignIn(e)}>
@@ -62,6 +59,10 @@ export function SignIn() {
           </Button>
         </S.Form>
       </S.Wrap>
+      {message.type && (
+        <Message message={message.new_message} type={message.type} />
+      )}
+
       {loading ? <Loading /> : null}
     </S.Page>
   );
