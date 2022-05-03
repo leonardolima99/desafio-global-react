@@ -51,14 +51,20 @@ export function UserControl({
       return false;
     }
     if (action === "edit") {
-      await api.put(`users/${id}`, {
-        email,
-        senha,
-        nivel_acesso: nivelAcesso,
-      });
+      api
+        .put(`users/${id}`, {
+          email,
+          senha,
+          nivel_acesso: nivelAcesso,
+        })
+        .then((response) => {})
+        .catch((error) => {
+          updateMessage(error.response.data.errors[0].msg);
+        });
     } else if (action === "new") {
       if (users.find((user: DataProps) => user.email === email)) {
         setLoading(false);
+        updateMessage("Este usuário já existe.");
         return false;
       }
 
