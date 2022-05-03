@@ -11,10 +11,15 @@ type AuthContextData = {
   signed: boolean;
   loading: boolean;
   user: User | undefined;
-  message: string;
-  updateMessage: (new_message: string) => void;
+  message: MessageParams;
+  updateMessage: (params: MessageParams) => void;
   signIn(email: string, senha: string, callback: VoidFunction): void;
   signOut(callback: VoidFunction): void;
+};
+
+type MessageParams = {
+  new_message: string[];
+  type: "error" | "success" | "info" | undefined;
 };
 
 type AuthProviderProps = {
@@ -50,7 +55,7 @@ export function useAuth() {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [message, setMessage] = useState<string>("");
+  const [message, setMessage] = useState<MessageParams>({} as MessageParams);
 
   function decode(token: string | undefined): User | undefined {
     if (token) {
@@ -70,18 +75,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
-  function updateMessage(new_message: string) {
-    setMessage(new_message);
+  function updateMessage({ new_message, type }: MessageParams) {
+    setMessage({ new_message, type });
   }
 
   async function signIn(email: string, senha: string, callback: VoidFunction) {
     auth
       .signIn(email, senha)
       .then((response) => {
-        if (response?.status === 401) {
-          updateMessage(JSON.stringify(response?.data));
-        }
-
         const user_temp = decode(response?.data.token);
         if (user_temp) {
           localStorage.setItem("User", JSON.stringify(user_temp));
@@ -91,12 +92,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(user_temp);
         }
       })
-      .catch((error: AxiosError<AxiosResponse<ResponseData>>) => {
-        const err = new AxiosError(error.message);
-        const { response } = err.message as any;
-        if (response) {
-          updateMessage(response.data.message);
-        }
+      .catch((error) => {
+        console.log(error.message.response.data.message);
+        updateMessage({
+          new_message: [error.message.response.data.message],
+          type: "error",
+        });
       });
 
     callback();
