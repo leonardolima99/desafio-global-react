@@ -1,11 +1,27 @@
 import { useEffect, useState } from "react";
 import { Button } from "../../components/Button";
 import { Loading } from "../../components/Loading";
-import { MessageError } from "../../components/MessageError";
+import { Message } from "../../components/Message";
 import { DataProps, UserControl } from "../../components/UserControl";
 import { useAuth } from "../../contexts/auth";
 import api from "../../services/api";
 import * as S from "./styles";
+
+export type AwaitMessageParams = {
+  value: boolean;
+  setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  time?: number;
+};
+
+export function awaitMessage({ value, setValue, time }: AwaitMessageParams) {
+  setValue(true);
+  console.log("valor", value);
+  time &&
+    setTimeout(() => {
+      console.log("bye");
+      setValue(false);
+    }, time);
+}
 
 export function Management() {
   const [visible, setVisible] = useState<boolean>(false);
@@ -14,9 +30,9 @@ export function Management() {
   const [users, setUsers] = useState<DataProps[]>([] as DataProps[]);
   const [reload, setReload] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [messageInfo, setMessageInfo] = useState<string>("");
+  const [messageVisible, setMessageVisible] = useState<boolean>(false);
 
-  const { message } = useAuth();
+  const { message, updateMessage } = useAuth();
 
   function handleNewUser() {
     action !== "new" ? setAction("new") : null;
@@ -37,11 +53,13 @@ export function Management() {
     setReload(!reload);
     setLoading(false);
 
-    setMessageInfo(response.data.message);
+    updateMessage({ new_message: [response.data.message], type: "success" });
 
-    setTimeout(() => {
-      setMessageInfo("");
-    }, 5000);
+    awaitMessage({
+      value: messageVisible,
+      setValue: setMessageVisible,
+      time: 5000,
+    });
   }
 
   async function listUsers() {
@@ -79,10 +97,15 @@ export function Management() {
           loading={loading}
           setLoading={setLoading}
           users={users}
+          awaitMessage={awaitMessage}
+          messageVisible={messageVisible}
+          setMessageVisible={setMessageVisible}
         />
       ) : null}
       {loading ? <Loading /> : null}
-      {message && <MessageError message={message} />}
+      {messageVisible && (
+        <Message message={message.new_message} type={message.type} />
+      )}
       <S.Table>
         <S.HeadTable>
           {/* <S.WrapLine> */}
@@ -92,11 +115,6 @@ export function Management() {
           <S.HeadAction>Ações</S.HeadAction>
         </S.HeadTable>
         <S.List>
-          {messageInfo ? (
-            <S.ItemMessage>
-              <S.TextMessage>{messageInfo}</S.TextMessage>
-            </S.ItemMessage>
-          ) : null}
           {users.map((usr) => (
             <S.Item key={usr.email}>
               {/* <S.WrapLine> */}
