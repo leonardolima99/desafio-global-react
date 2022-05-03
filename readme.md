@@ -18,13 +18,23 @@ git clone https://github.com/leonardolima99/desafio-global-react.git
 Vá até a pasta do projeto e execute um
 
 ```
-yarn install
+yarn install # caso use yarn
+```
+ou
+
+```
+npm install # caso use npm
 ```
 
 Depois é só rodar um
 
 ```
-yarn dev
+yarn dev # usando yarn
+```
+ou 
+
+```
+npm run dev # com o npm
 ```
 
 Usuários mocados:
