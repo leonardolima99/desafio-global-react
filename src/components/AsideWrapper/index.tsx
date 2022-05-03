@@ -10,11 +10,12 @@ export type AsideWrapperProps = {
 };
 
 export function AsideWrapper({ children }: AsideWrapperProps) {
-  const { signOut, user } = useAuth();
+  const { signOut, user, updateMessage } = useAuth();
   const [visible, setVisible] = useState<boolean>(false);
   const navigate = useNavigate();
   const handleSignOut = () => {
     signOut(() => {
+      updateMessage({ new_message: [""], type: undefined });
       navigate("/signin", { replace: true });
     });
   };
