@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "../../contexts/auth";
+import { AwaitMessageParams } from "../../pages/Management";
 import api from "../../services/api";
 import { Button } from "../Button";
 
@@ -22,6 +23,13 @@ export type UserControlProps = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   users: DataProps[];
+  awaitMessage: ({ value, setValue, time }: AwaitMessageParams) => void;
+  messageVisible: boolean;
+  setMessageVisible: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+type Error = {
+  msg: string;
 };
 
 export function UserControl({
@@ -35,6 +43,9 @@ export function UserControl({
   loading,
   setLoading,
   users,
+  awaitMessage,
+  messageVisible,
+  setMessageVisible,
 }: UserControlProps) {
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
@@ -57,14 +68,33 @@ export function UserControl({
           senha,
           nivel_acesso: nivelAcesso,
         })
-        .then((response) => {})
+        .then((response) => {
+          setVisible(false);
+          setReload(!reload);
+          setLoading(false);
+          setMessageVisible(false);
+        })
         .catch((error) => {
-          updateMessage(error.response.data.errors[0].msg);
+          setLoading(false);
+          const errors = error.response.data.errors;
+          console.log(error);
+          updateMessage({
+            new_message: errors.map((error: Error) => error.msg),
+            type: "error",
+          });
+          awaitMessage({
+            value: messageVisible,
+            setValue: setMessageVisible,
+            time: 5000,
+          });
         });
     } else if (action === "new") {
       if (users.find((user: DataProps) => user.email === email)) {
         setLoading(false);
-        updateMessage("Este usuário já existe.");
+        updateMessage({
+          new_message: ["Este usuário já existe."],
+          type: "error",
+        });
         return false;
       }
 
@@ -74,16 +104,34 @@ export function UserControl({
           senha,
           nivel_acesso: nivelAcesso,
         })
-        .then((response) => {})
+        .then((response) => {
+          setVisible(false);
+          setReload(!reload);
+          setLoading(false);
+          setMessageVisible(false);
+        })
         .catch((error) => {
-          updateMessage(error.response.data.errors[0].msg);
+          setLoading(false);
+          const errors = error.response.data.errors;
+          console.log(errors.map((error: Error) => error.msg));
+          updateMessage({
+            new_message: errors.map((error: Error) => error.msg),
+            type: "error",
+          });
+          awaitMessage({
+            value: messageVisible,
+            setValue: setMessageVisible,
+          });
         });
       setData({} as DataProps);
     }
-    setVisible(false);
-    setReload(!reload);
-    setLoading(false);
   };
+
+  function handleClose(e: FormEvent) {
+    e.preventDefault();
+    setVisible(false);
+    setMessageVisible(false);
+  }
 
   useEffect(() => {
     if (action === "edit") {
@@ -106,10 +154,7 @@ export function UserControl({
             icon="none"
             color="danger"
             size="small"
-            onClick={(e) => {
-              e.preventDefault();
-              setVisible(false);
-            }}
+            onClick={handleClose}
           >
             Fechar
           </Button>
