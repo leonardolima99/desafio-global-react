@@ -14,6 +14,7 @@ export async function signIn(email: string, senha: string) {
 
     return response;
   } catch (error) {
-    console.log("ass", error);
+    const err = error as AxiosError<ResponseData, any>;
+    throw new AxiosError(err as any);
   }
 }
