@@ -8,17 +8,14 @@ import api from "../../services/api";
 import * as S from "./styles";
 
 export type AwaitMessageParams = {
-  value: boolean;
   setValue: React.Dispatch<React.SetStateAction<boolean>>;
   time?: number;
 };
 
-export function awaitMessage({ value, setValue, time }: AwaitMessageParams) {
+export function awaitMessage({ setValue, time }: AwaitMessageParams) {
   setValue(true);
-  console.log("valor", value);
   time &&
     setTimeout(() => {
-      console.log("bye");
       setValue(false);
     }, time);
 }
@@ -56,7 +53,6 @@ export function Management() {
     updateMessage({ new_message: [response.data.message], type: "success" });
 
     awaitMessage({
-      value: messageVisible,
       setValue: setMessageVisible,
       time: 5000,
     });

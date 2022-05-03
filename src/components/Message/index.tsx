@@ -12,7 +12,7 @@ export function Message({ message, type }: Props) {
         <S.MessageWrap>
           {message.map((text) => (
             <S.MessageError key={text}>
-              <S.Span>{text}</S.Span>;
+              <S.Span>{text}</S.Span>
             </S.MessageError>
           ))}
         </S.MessageWrap>
@@ -23,7 +23,7 @@ export function Message({ message, type }: Props) {
         <S.MessageWrap>
           {message.map((text) => (
             <S.MessageSuccess key={text}>
-              <S.Span>{text}</S.Span>;
+              <S.Span>{text}</S.Span>
             </S.MessageSuccess>
           ))}
         </S.MessageWrap>
@@ -34,7 +34,7 @@ export function Message({ message, type }: Props) {
         <S.MessageWrap>
           {message.map((text) => (
             <S.MessageInfo key={text}>
-              <S.Span>{text}</S.Span>;
+              <S.Span>{text}</S.Span>
             </S.MessageInfo>
           ))}
         </S.MessageWrap>

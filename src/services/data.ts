@@ -3,7 +3,7 @@ import api from "./api";
 
 function loadData() {
   let data = {} as Data;
-  api.get("helth-check").then((response) => {
+  api.get("health-check").then((response) => {
     data = response.data;
 
     const data_temp = [

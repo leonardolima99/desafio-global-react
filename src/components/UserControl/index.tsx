@@ -23,7 +23,7 @@ export type UserControlProps = {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   users: DataProps[];
-  awaitMessage: ({ value, setValue, time }: AwaitMessageParams) => void;
+  awaitMessage: ({ setValue, time }: AwaitMessageParams) => void;
   messageVisible: boolean;
   setMessageVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -69,10 +69,14 @@ export function UserControl({
           nivel_acesso: nivelAcesso,
         })
         .then((response) => {
+          updateMessage({
+            new_message: ["Usuário editado com sucesso."],
+            type: "success",
+          });
           setVisible(false);
           setReload(!reload);
           setLoading(false);
-          setMessageVisible(false);
+          awaitMessage({ setValue: setMessageVisible, time: 5000 });
         })
         .catch((error) => {
           setLoading(false);
@@ -82,11 +86,7 @@ export function UserControl({
             new_message: errors.map((error: Error) => error.msg),
             type: "error",
           });
-          awaitMessage({
-            value: messageVisible,
-            setValue: setMessageVisible,
-            time: 5000,
-          });
+          setMessageVisible(true);
         });
     } else if (action === "new") {
       if (users.find((user: DataProps) => user.email === email)) {
@@ -105,10 +105,14 @@ export function UserControl({
           nivel_acesso: nivelAcesso,
         })
         .then((response) => {
+          updateMessage({
+            new_message: ["Usuário criado com sucesso."],
+            type: "success",
+          });
           setVisible(false);
           setReload(!reload);
           setLoading(false);
-          setMessageVisible(false);
+          awaitMessage({ setValue: setMessageVisible, time: 5000 });
         })
         .catch((error) => {
           setLoading(false);
@@ -118,10 +122,7 @@ export function UserControl({
             new_message: errors.map((error: Error) => error.msg),
             type: "error",
           });
-          awaitMessage({
-            value: messageVisible,
-            setValue: setMessageVisible,
-          });
+          setMessageVisible(true);
         });
       setData({} as DataProps);
     }

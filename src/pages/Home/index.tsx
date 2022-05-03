@@ -4,11 +4,9 @@ import { AuthContext } from "../../contexts/auth";
 */
 
 import * as S from "./styles";
-import { healthCheck } from "../../services/data";
 
 import { Chart, LineDataProps } from "../../components/Chart";
 import { useAuth } from "../../contexts/auth";
-import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import api from "../../services/api";
 import { Loading } from "../../components/Loading";
@@ -43,7 +41,7 @@ export function Home() {
 
   async function loadData() {
     setShow(false);
-    api.get("helth-check").then((response) => {
+    api.get("health-check").then((response) => {
       setData({ ...response.data });
       console.log("a", data);
       if (!response.data.cpu.labels.length) return;
