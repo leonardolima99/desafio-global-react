@@ -13,7 +13,7 @@ type AuthContextData = {
   user: User | undefined;
   message: string;
   updateMessage: (new_message: string) => void;
-  signIn(email: string, senha: string, callback: VoidFunction): Error | any;
+  signIn(email: string, senha: string, callback: VoidFunction): void;
   signOut(callback: VoidFunction): void;
 };
 
@@ -75,39 +75,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }
 
   async function signIn(email: string, senha: string, callback: VoidFunction) {
-    try {
-      if (!email) throw new Error("O campo e-mail é obrigatório.");
-      if (!senha) throw new Error("O campo senha é obrigatório.");
+    auth
+      .signIn(email, senha)
+      .then((response) => {
+        if (response?.status === 401) {
+          updateMessage(JSON.stringify(response?.data));
+        }
 
-      auth
-        .signIn(email, senha)
-        .then((response: AxiosResponse<ResponseData>) => {
-          if (response.status === 401) {
-            updateMessage(JSON.stringify(response.data));
-          }
+        const user_temp = decode(response?.data.token);
+        if (user_temp) {
+          localStorage.setItem("User", JSON.stringify(user_temp));
+          api.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${user_temp.token}`;
+          setUser(user_temp);
+        }
+      })
+      .catch((error: AxiosError<AxiosResponse<ResponseData>>) => {
+        const err = new AxiosError(error.message);
+        const { response } = err.message as any;
+        if (response) {
+          updateMessage(response.data.message);
+        }
+      });
 
-          const user_temp = decode(response.data.token);
-          if (user_temp) {
-            localStorage.setItem("User", JSON.stringify(user_temp));
-            api.defaults.headers.common[
-              "Authorization"
-            ] = `Bearer ${user_temp.token}`;
-            setUser(user_temp);
-          }
-        })
-        .catch((error: AxiosError<AxiosResponse<ResponseData>>) => {
-          const err = new AxiosError(error.message);
-          const { response } = err.message as any;
-          if (response) {
-            updateMessage(response.data.message);
-          }
-        });
-
-      callback();
-    } catch (error) {
-      const err = error as Error | AxiosError;
-      return err;
-    }
+    callback();
   }
 
   function signOut(callback: VoidFunction) {

@@ -1,14 +1,11 @@
 import api from "./api";
-import { AxiosResponse, AxiosError } from "axios";
+import { AxiosResponse, AxiosError, Axios } from "axios";
 
 type ResponseData = {
   token: string;
 };
 
-export async function signIn(
-  email: string,
-  senha: string
-): Promise<AxiosResponse<ResponseData, any>> {
+export async function signIn(email: string, senha: string) {
   try {
     const params = new URLSearchParams();
     params.append("email", email);
@@ -17,7 +14,6 @@ export async function signIn(
 
     return response;
   } catch (error) {
-    const err = error as Error | AxiosError;
-    throw new AxiosError(err);
+    console.log("ass", error);
   }
 }
