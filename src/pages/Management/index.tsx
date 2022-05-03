@@ -82,6 +82,7 @@ export function Management() {
         />
       ) : null}
       {loading ? <Loading /> : null}
+      {message && <MessageError message={message} />}
       <S.Table>
         <S.HeadTable>
           {/* <S.WrapLine> */}
@@ -91,7 +92,6 @@ export function Management() {
           <S.HeadAction>Ações</S.HeadAction>
         </S.HeadTable>
         <S.List>
-          {message && <MessageError message={message} />}
           {messageInfo ? (
             <S.ItemMessage>
               <S.TextMessage>{messageInfo}</S.TextMessage>

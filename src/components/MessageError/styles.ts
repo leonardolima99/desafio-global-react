@@ -3,11 +3,10 @@ import styled from "styled-components";
 export const MessageError = styled.div`
   width: auto;
   height: 48px;
+  margin: 16px;
   background-color: rgba(255, 38, 38, 0.9);
   justify-content: center;
   align-content: center;
-  position: fixed;
-  top: 0;
 `;
 
 export const Span = styled.span`

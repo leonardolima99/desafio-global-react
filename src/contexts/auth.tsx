@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           const err = new AxiosError(error.message);
           const { response } = err.message as any;
           if (response) {
-            updateMessage(err.message.response.data.message);
+            updateMessage(response.data.message);
           }
         });
 
